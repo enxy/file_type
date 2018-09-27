@@ -74,17 +74,20 @@ public class Type {
 
 
     public static void main(String[] args) throws Exception {
-
+        try {
+            if (args.length!=1) {
+                throw new IllegalArgumentException("You need to give one path to file");
+            }
             String filePath = args[0];
-            System.out.println(filePath);
 
             Type type = new Type();
             File f = new File(filePath);
             String realExt = type.getFileType(f);
 
-            System.out.println(filePath);
 
-
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 }
