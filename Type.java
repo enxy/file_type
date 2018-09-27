@@ -26,10 +26,28 @@ public class Types {
         return signatures.keySet();
     }
 
+    public String getFileType(File file) throws IOException {
+        InputStream fileStream = new FileInputStream(file);
+        byte[] buffer = new byte[SIZE_OF_BUFFER];
+
+        try {
+            int content = fileStream.read(buffer, 0, SIZE_OF_BUFFER);
+            for (int x = content; (x < SIZE_OF_SIGNATURE) && (content > 0); x += content) {
+                content = fileStream.read(buffer, x, SIZE_OF_BUFFER - x);
+            }
+
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        finally {
+            fileStream.close();
+        }
+    }
+
     public static void main(String[] args) throws Exception {
 
         Types types = new Types();
         Set<String> extSet = types.getAvailableExt();
-        System.out.println(extSet);
+
     }
 }
