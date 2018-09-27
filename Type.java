@@ -12,6 +12,16 @@ public class Types {
     private static final int[] text = {0x46, 0x4F, 0x52, 0x4D, 0x46, 0x54, 0x58, 0x54, 0xEF, 0xBB, 0xBF};
     private static final int[] pdf ={0x25, 0x50, 0x44, 0x46};
 
+    public FileTypeTest() {
+        //adavilable extensions of files
+        this.signatures = new HashMap<String,int[]>();
+        signatures.put("JPG", jpeg);
+        signatures.put("GIF", gif);
+        signatures.put("TXT", text);
+        signatures.put("PNG", png);
+        signatures.put("PDF", pdf);
+    }
+
     public Set getAvailableExt() {
         return signatures.keySet();
     }
