@@ -84,6 +84,9 @@ public class Type {
             File f = new File(filePath);
             String realExt = type.getFileType(f);
 
+            int i = filePath.lastIndexOf('.');
+            String ext = filePath.substring(i+1);
+            Set<String> extSet = type.getAvailableExt();
 
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
