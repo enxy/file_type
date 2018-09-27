@@ -1,8 +1,18 @@
 package ext;
-import java.util.Map;
-import java.util.*;
 
-public class Types {
+import java.io.File;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.*;
+import java.lang.IllegalArgumentException;
+
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
+public class Type {
     private Map<String,int[]> signatures;
     private static final int SIZE_OF_BUFFER = 4*1024;
     private static final int SIZE_OF_SIGNATURE = 8;
@@ -12,8 +22,7 @@ public class Types {
     private static final int[] text = {0x46, 0x4F, 0x52, 0x4D, 0x46, 0x54, 0x58, 0x54, 0xEF, 0xBB, 0xBF};
     private static final int[] pdf ={0x25, 0x50, 0x44, 0x46};
 
-    public FileTypeTest() {
-        //adavilable extensions of files
+    public Type() {
         this.signatures = new HashMap<String,int[]>();
         signatures.put("JPG", jpeg);
         signatures.put("GIF", gif);
@@ -26,28 +35,56 @@ public class Types {
         return signatures.keySet();
     }
 
-    public String getFileType(File file) throws IOException {
-        InputStream fileStream = new FileInputStream(file);
+    public String getFileType(File f) throws IOException {
         byte[] buffer = new byte[SIZE_OF_BUFFER];
+        InputStream fileStream = new FileInputStream(f);
 
         try {
             int content = fileStream.read(buffer, 0, SIZE_OF_BUFFER);
+            int a = content;
+            String fileType = "";
             for (int x = content; (x < SIZE_OF_SIGNATURE) && (content > 0); x += content) {
                 content = fileStream.read(buffer, x, SIZE_OF_BUFFER - x);
             }
 
-        } catch (Exception e) {
-            return e.getMessage();
+            for (Iterator<String> i = signatures.keySet().iterator(); i.hasNext();) {
+                String key = i.next();
+                if (findMatches(signatures.get(key), buffer, a)) {
+                    fileType = key;
+                    break;
+                }
+            }
+            return fileType;
         }
         finally {
             fileStream.close();
         }
     }
 
+    private static boolean findMatches(int[] signature, byte[] buffer, int size) {
+        boolean exists = true;
+        for (int i = 0; i < signature.length; i++) {
+            if (signature[i] != (0x00ff & buffer[i])) {
+                exists = false;
+                break;
+            }
+        }
+        return exists;
+    }
+
+
     public static void main(String[] args) throws Exception {
 
-        Types types = new Types();
-        Set<String> extSet = types.getAvailableExt();
+            String filePath = args[0];
+            System.out.println(filePath);
+
+            Type type = new Type();
+            File f = new File(filePath);
+            String realExt = type.getFileType(f);
+
+            System.out.println(filePath);
+
+
 
     }
 }
