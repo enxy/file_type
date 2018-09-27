@@ -88,6 +88,12 @@ public class Type {
             String ext = filePath.substring(i+1);
             Set<String> extSet = type.getAvailableExt();
 
+            if (ext.isEmpty() || !extSet.contains(ext.toUpperCase())) {
+                throw new IllegalArgumentException("Unknown file extension. You can use only " + extSet + " files");
+            }
+
+
+
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
