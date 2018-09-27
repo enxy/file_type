@@ -92,7 +92,13 @@ public class Type {
                 throw new IllegalArgumentException("Unknown file extension. You can use only " + extSet + " files");
             }
 
-
+            String msg = "";
+            if (ext.equals(realExt.toLowerCase())) {
+                msg += "A " + ext + " file is a " +  realExt.toLowerCase() + " file";
+            } else {
+                msg += "File extension is " + ext + " while actually it\'s a " + realExt.toLowerCase();
+            }
+            System.out.println(msg);
 
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
